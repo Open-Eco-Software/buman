@@ -1,0 +1,58 @@
+generator client {
+  provider      = "prisma-client-js"
+  output        = "../../../node_modules/@prisma/client/buman"
+  binaryTargets = ["native", "debian-openssl-1.1.x"]
+}
+
+generator dbml {
+  provider = "prisma-dbml-generator"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
+  username  String   @unique
+  email     String   @unique
+  firstName String
+  lastName  String
+  password  String
+  role      Role     @default(CLIENT)
+  blocked   Boolean  @default(false)
+  // Sessions  Session[]
+  // role      Role?     @relation(fields: [roleId], references: [id])
+  // roleId    String?
+}
+
+enum Role {
+  CLIENT
+  STAFF
+  ADMIN
+}
+
+// BUM-139 TODO: Avanced Session, Role and Permission Management System
+// model Session {
+//   id           String   @id @default(cuid())
+//   refreshToken String   @unique
+//   User         User?    @relation(fields: [userId], references: [id])
+//   userId       String?
+//   expireAt     DateTime
+// }
+// model Role {
+//   id          String       @id @default(cuid())
+//   Permissions Permission[]
+//   User        User[]
+// }
+//
+// model Permission {
+//   id        String  @id @default(cuid())
+//   operation String
+//   object    String
+//   Role      Role?   @relation(fields: [roleId], references: [id])
+//   roleId    String?
+// }
