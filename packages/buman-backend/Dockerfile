@@ -6,10 +6,10 @@
 # Run the container with `docker run -p 3000:3000 -t buman-backend`.
 FROM docker.io/node:lts-alpine as build-stage
 
-ARG HOST
-ARG PORT
-ENV HOST=${HOST}
-ENV PORT=${PORT}
+ARG HOST_BUMAN_BACKEND
+ARG PORT_BUMAN_BACKEND
+ENV HOST_BUMAN_BACKEND=${HOST_BUMAN_BACKEND}
+ENV PORT_BUMAN_BACKEND=${PORT_BUMAN_BACKEND}
 
 WORKDIR /app
 
@@ -25,8 +25,6 @@ WORKDIR /app
 COPY dist/packages/buman-backend buman-backend
 COPY --from=build-stage /app/buman-backend/package.json buman-backend/
 COPY --from=build-stage /app/buman-backend/node_modules ./buman-backend/node_modules/
-RUN ls /app/buman-backend/
-
 
 CMD [ "node", "buman-backend/main.js" ]
 
